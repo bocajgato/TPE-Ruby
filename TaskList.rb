@@ -6,8 +6,6 @@ require_relative 'TaskCompletedError.rb'
 
 class TaskList
     attr_reader :task_list, :autonumeric
-    @task_list
-    @autonumeric
     def initialize
       @task_list=SortedSet.new
       @autonumeric=1
@@ -19,21 +17,25 @@ class TaskList
       [@autonumeric-1 , task]
     end
     def list(date,group,other) #CORREGIRLO
-      return ["all",@task_list.select { |task| task[0].date===date }] unless date.nil? #Selecciona en base a una fecha
-      return [group,@task_list.select { |task| task[0].group==group }] unless group.nil? #Selecciona en base a un grupo
+      hash_list = Hash.new { }
+      hash_list["all"} = @task_list.select { |task| task[0].date===date } }) unless date.nil? #Selecciona en base a una fecha
+      return hash_list.merge({:"all" => @task_list.select { |task| task[0].group==group } }) unless group.nil? #Selecciona en base a un grupo
       b=@task_list.select{ |task| !task[0].date.nil?} if other.isdaterange? #Elimina las tareas sin fechas si luego queremos
       case other                                                         #comparar por un rango de fechas porque los metodos
         when "this week"                                                 #siguientes no se definen para la clase nil
-          return ["all", b.select { |task| task[0].date.this_week? }]
+          return hash_list.merge({:"all" => b.select { |task| task[0].date.this_week? } })
         when "this month"
-          return ["all",b.select { |task| task[0].date.this_month? }]
+          return hash_list.merge({:"all" => b.select { |task| task[0].date.this_month? } })
         when "overdue"
-          return ["all",b.select { |task| task[0].overdue? }]
+          return hash_list.merge({:"all" => b.select { |task| task[0].overdue? } }) #agregar task(0) una variable
         when "group" #Al ordenar por grupos tambien tenemos que eliminar las tareas sin grupo por la razon anterior
-          return [other,(@task_list.select{ |task| !task[0].group.nil?}).sort { |x,y| x[0].sort_by_group(y[0]) }]
+          return [other,(@task_list.select{ |task| !task[0].group.nil?}).sort { |x,y| x[0].sort_by_group(y[0]) }] #MAL
+        when ""
+          hash_list.merge({:"all" => @task_list })
+        else
+          raise 'Invalid parameter'
       end
-      raise 'Invalid parameter' unless other==""
-      ["all",@task_list]
+      hash_list
     end
     def ac
       @task_list.delete_if { |task| task[0].state==1}

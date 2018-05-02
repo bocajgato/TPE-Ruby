@@ -27,7 +27,7 @@ class Task
     def to_s
       "#{@description}"
     end
-    def all_info #Cada vez que quiero listar voy a poner toda la informacion de la tarea
+    def all_info(with_group=true) #Cada vez que quiero listar voy a poner toda la informacion de la tarea
       (@state==1? "[X] " : "[ ] ") + (@date.nil?? BLANK_SPACE_DATE : "#{@date.taskdate_to_s}" ) + ( @group.nil?? "" : " +") + "#{@group} #{@description}"
     end
     end

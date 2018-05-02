@@ -4,8 +4,10 @@ class Output
   def print_add(output_add)
     puts "Todo [#{output_add[0]}: " + output_add[1].to_s + "] added"
   end
-  def print_list(set_list) #TERMINARLO
-
+  def print_list(hash_list,group=nil,desc="") #TERMINARLO
+    print_list_all(hash_list) if group.nil? && desc==""
+    print_list_group(group,hash_list) unless group.nil?
+    print_list_groups(hash_list) if desc=="group"
   end
   def print_ac
     puts "All completed todos have been archived"
@@ -16,21 +18,22 @@ class Output
   def print_save
     puts "Chores successfully saved"
   end
-  def print_find(set_find)
+  def print_find(hash_find)
     set_find.each { |task| puts "#{task[1]} " + " #{task[0].all_info}" }
   end
   def print_open
     "Chores successfully recovered"
   end
-  private def print_list_all(set_list)
+  private def print_list_all(hash_list)
     puts "all\n"
     set_list.each { |task| puts "#{task[1]}\t" + " #{task[0].all_info}" }
   end
-  private def print_list_group(group,set_list)
+  private def print_list_group(group,hash_list)
     puts "#{group}\n"
     set_list[1].each { |task| puts "#{task[1]}\t" + " #{task[0].all_info}" }
   end
-  private def print_list_groups
+  private def print_list_groups(hash_list)
+
   end
   def print_question_open
     puts "In order to recover old chores, the new ones will be replaced\nWould you like to continue? Yes/No"
