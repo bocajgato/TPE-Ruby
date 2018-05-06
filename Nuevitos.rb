@@ -56,7 +56,7 @@ class AcTasks
     @command_parameters=command_parameters
   end
   def execute
-    raise InvalidAc unless @description==""
+    raise InvalidAc unless @command_parameters==""
     @tasklist.complete
   end
   def to_s
