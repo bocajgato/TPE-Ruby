@@ -81,3 +81,43 @@ class InputParser
       @command_parameters
     end
 end   
+class AddTask
+  def initialize(command_parameters,task_list)
+    @task_list=task_list
+    @group=command_parameter.get_group
+    @date=TaskDate.new(command_parameter.get_date)
+    @description=command_parameters.get_description
+  end
+  def execute
+    task=PendingTask.new(@description,@date,@group)
+    @task_list.add(task)
+  end
+  def to_s
+    "Todo [#{task_list.autonumeric+1} :"+ @description + "] added" #Le aumentamos uno al id
+  end
+end
+class CompleteTask
+  def initialize(command_parameters,task_list)
+    @task_list=task_list
+    @id=get_id(command_parameters)
+  end
+  def execute
+    raise InvalidIdException if @id<=0
+    @completed_task=@task_list.complete(@id)
+  end
+  def to_s
+    "Todo [ #{@id}: #{@completed_task.description}] completed"
+  end
+end
+class FindTask
+  def initialize(command_paramenters,task_list)
+    @task_list=task_list
+    @find=command_paramenters
+  end
+  def execute
+    @set_find=@task_list.find(@find)
+  end
+  def to_s
+    @set_find.each { |task| puts "#{task[1]} " + " #{task[0].all_info}" }
+  end
+end
